@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security problem
+    url: https://github.com/alamin2507/portfolio/security/advisories/new
+    about: Please report security issues privately.
+  - name: Get in touch
+    url: https://sayem.me
+    about: For projects and work, use the contact details on the site.

@@ -1,0 +1,21 @@
+name: Bug report
+description: Something on the site looks or works wrong
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What is wrong?
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where?
+      placeholder: Section name or link, for example "Services on phone"
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: iPhone 14, Safari 18
