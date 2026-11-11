@@ -1,0 +1,179 @@
+---
+import { education } from '../data/site';
+
+// A journey reads oldest first; the data file lists newest first.
+const stops = education.toReversed();
+---
+
+<section class="section wrap" id="education">
+  <header class="sec-head reveal">
+    <span class="label">05</span>
+    <h2>Education</h2>
+    <span class="label muted">/ The journey so far</span>
+  </header>
+
+  <div class="journey">
+    <!-- The road: one curved SVG path, stretched to the size of the list. -->
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M 14 0 C 14 22, 30 30, 30 36 C 30 50, 72 50, 72 64 C 72 72, 88 80, 88 100" />
+    </svg>
+
+    <ol>
+      {stops.map((e, i) => (
+        <li class="reveal">
+          <div class="stop">
+            <div class="stub">
+              <span class="label">Stop 0{i + 1}</span>
+              <p class="years">
+                {e.year.split('–').map((y) => (
+                  <span>{y.trim()}</span>
+                ))}
+              </p>
+            </div>
+            <div class="body">
+              {e.current && (
+                <p class="label now">
+                  <span class="dot" /> Current
+                </p>
+              )}
+              <h3>{e.title}</h3>
+              <p class="place">{e.place}</p>
+              <p class="note">{e.note}</p>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .journey {
+    position: relative;
+    padding-block: clamp(3rem, 7vw, 6rem);
+  }
+
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Dashed line that keeps its thickness when the SVG is stretched, and slowly moves. */
+  path {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-dasharray: 10 10;
+    vector-effect: non-scaling-stroke;
+    animation: drive 1.2s linear infinite;
+  }
+
+  @keyframes drive {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+
+  ol {
+    position: relative;
+    display: grid;
+    gap: clamp(6rem, 14vw, 12rem);
+  }
+
+  li {
+    width: min(100%, 36rem);
+  }
+
+  li:nth-child(even) {
+    justify-self: end;
+  }
+
+  /* Each stop is a ticket: a stub with the years, a dashed tear line, and two
+     half-circle notches cut where the tear line meets the edges (a CSS mask).
+     Solid background so the road disappears behind it. */
+  .stop {
+    --stub: clamp(5.5rem, 10vw, 7.5rem);
+    display: grid;
+    grid-template-columns: var(--stub) minmax(0, 1fr);
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    mask:
+      radial-gradient(circle 0.75rem at var(--stub) 0, #0000 97%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle 0.75rem at var(--stub) 100%, #0000 97%, #000) bottom / 100% 51% no-repeat;
+    transition: background-color 0.5s var(--ease);
+  }
+
+  .stub {
+    display: grid;
+    align-content: space-between;
+    gap: 1.5rem;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border-right: 1px dashed var(--ink);
+  }
+
+  .years {
+    display: grid;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+  }
+
+  .body {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .stop:hover {
+    background: var(--accent);
+  }
+
+  /* "Current" pill: accent fill, flips to dark when the stop itself turns accent. */
+  .now {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: var(--radius);
+    background: var(--accent);
+    font-weight: 600;
+    transition:
+      background-color 0.5s var(--ease),
+      color 0.5s var(--ease);
+  }
+
+  .now .dot {
+    background: currentColor;
+  }
+
+  .stop:hover .now {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  h3 {
+    margin-top: 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .place {
+    font-weight: 400;
+  }
+
+  @media (max-width: 800px) {
+    li {
+      width: 86%;
+    }
+  }
+</style>

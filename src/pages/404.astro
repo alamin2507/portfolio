@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import { site } from '../data/site';
+---
+
+<Layout title={`Page not found · ${site.name}`} noindex>
+  <Nav />
+  <main id="main" class="lost wrap">
+    <p class="label muted">Error 404</p>
+    <h1>This page took a <em>wrong turn.</em></h1>
+    <a class="btn btn--solid" href="/"><span>Back to home ↖</span></a>
+  </main>
+</Layout>
+
+<style>
+  .lost {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.5rem;
+    min-height: 100svh;
+  }
+
+  h1 {
+    max-width: 14ch;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 9vw, 8rem);
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+
+  em {
+    font-style: normal;
+    color: var(--accent);
+  }
+</style>

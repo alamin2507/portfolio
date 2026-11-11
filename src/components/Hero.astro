@@ -1,0 +1,214 @@
+---
+import { Picture } from 'astro:assets';
+import portrait from '../assets/portrait.png';
+import { site } from '../data/site';
+---
+
+<section class="hero wrap" id="top">
+  <ul class="tags label muted">
+    <li>/ Designer &amp; Developer</li>
+    <li>/ AI-native builder</li>
+  </ul>
+
+  <h1>I design and build digital products that solve <em>real business problems.</em></h1>
+
+  <div class="photo">
+    <Picture
+      src={portrait}
+      formats={['avif', 'webp']}
+      widths={[400, 700, 1000]}
+      sizes="(max-width: 800px) 92vw, 38vw"
+      alt={`Portrait of ${site.name}`}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="actions">
+    <a class="btn btn--solid" href="#work"><span>View work ↘</span></a>
+    <a class="btn" href={`mailto:${site.email}`}><span>Let's talk ↗</span></a>
+  </div>
+
+  <dl class="strip label">
+    <div>
+      <dt class="muted">Based in</dt>
+      <dd>{site.location}</dd>
+    </div>
+    <div>
+      <dt class="muted">Status</dt>
+      <dd><span class="dot"></span> Available for work</dd>
+    </div>
+    <div>
+      <dt class="muted">{site.timeCity} time</dt>
+      <dd data-time={site.timeZone}>--:--</dd>
+    </div>
+  </dl>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 38vw);
+    grid-template-areas:
+      'tags photo'
+      'title photo'
+      'actions photo'
+      'strip strip';
+    grid-template-rows: auto 1fr auto auto;
+    gap: var(--gap) clamp(1.5rem, 3vw, 3rem);
+    min-height: 100svh;
+    padding-block: clamp(5.5rem, 9vw, 7.5rem) 1rem;
+  }
+
+  .tags {
+    grid-area: tags;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+  }
+
+  h1 {
+    grid-area: title;
+    align-self: center;
+    font-size: var(--fs-hero);
+    font-weight: 700;
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  /* Cut-out portrait standing in front of an accent block; the head rises above it. */
+  .photo {
+    grid-area: photo;
+    align-self: end;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo::before {
+    content: '';
+    position: absolute;
+    inset: 18% 0 0;
+    background: var(--accent);
+    transition: inset var(--slow) var(--ease);
+  }
+
+  .photo:hover::before {
+    inset: 10% 0 0;
+  }
+
+  .photo :global(img) {
+    position: relative;
+    width: 100%;
+    transform-origin: 50% 100%;
+    transition: transform var(--slow) var(--ease);
+  }
+
+  .photo:hover :global(img) {
+    transform: scale(1.04);
+  }
+
+  /* Desktop: the photo fills the whole column, top to bottom. The image is
+     taken out of the flow so it cannot stretch the hero, and is cropped at the sides. */
+  @media (min-width: 801px) {
+    .photo {
+      align-self: stretch;
+    }
+
+    .photo :global(img) {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 0;
+    }
+  }
+
+  .actions {
+    grid-area: actions;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2.5rem;
+  }
+
+  .strip {
+    grid-area: strip;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--gap);
+    padding-top: 1rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .strip div:last-child {
+    text-align: right;
+  }
+
+  @media (max-width: 800px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'tags' 'title' 'actions' 'photo' 'strip';
+      grid-template-rows: none;
+    }
+
+    .strip {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.75rem;
+    }
+
+    .strip div {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  /* Entrance: lines rise in as the loader lifts (it leaves at about 1.9 s). */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero > * {
+      animation: rise var(--slow) var(--ease) both;
+      animation-delay: 2.1s;
+    }
+
+    /* Photo: the block wipes up first, then the person slides up out of it. */
+    .hero > .photo {
+      animation: none;
+    }
+
+    .photo::before {
+      animation: wipe var(--slow) 2.1s var(--ease) both;
+    }
+
+    .photo :global(img) {
+      animation: stand 1s 2.4s var(--ease) both;
+    }
+
+
+    @keyframes wipe {
+      from {
+        clip-path: inset(100% 0 0);
+      }
+      to {
+        clip-path: inset(0);
+      }
+    }
+
+    @keyframes stand {
+      from {
+        opacity: 0;
+        transform: translateY(18%);
+      }
+    }
+
+    .hero > .actions,
+    .hero > .strip {
+      animation-delay: 2.3s;
+    }
+  }
+</style>

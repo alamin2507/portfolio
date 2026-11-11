@@ -1,0 +1,121 @@
+---
+import { projects } from '../data/site';
+---
+
+<section class="section wrap work" id="work">
+  <header class="sec-head reveal">
+    <span class="label">03</span>
+    <h2>Work</h2>
+    <span class="label muted">/ Selected projects</span>
+  </header>
+
+  <ol>
+    {projects.map((p, i) => (
+      <li class="row">
+        <span class="label muted">0{i + 1}</span>
+        <h3>{p.title}</h3>
+        <span class="label muted type">{p.type}</span>
+        <span class="label year">{p.year}</span>
+        {p.text && <p>{p.text}</p>}
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  /* Dark section: accent titles, everything else in the light page colour. */
+  .work {
+    background: var(--ink);
+    color: var(--bg);
+    --muted: var(--bg);
+    --line: rgb(243 242 238 / 0.2);
+  }
+
+  .sec-head {
+    border-top-color: var(--bg);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 2fr) minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.75rem var(--gap);
+    padding-block: clamp(1rem, 2.5vw, 2rem);
+    border-bottom: 1px solid var(--line);
+    transition: padding-left var(--fast) var(--ease);
+  }
+
+  .row:hover {
+    padding-left: 0.75rem;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 3.4vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Hover: a white band of light passes across the title, left to right.
+     The title is painted by a gradient clipped to the letters. */
+  .row:hover h3 {
+    color: transparent;
+    background: linear-gradient(110deg, var(--accent) 40%, var(--bg) 50%, var(--accent) 60%) 150% 0 / 250% 100%;
+    background-clip: text;
+    animation: shine 1s ease-in-out both;
+  }
+
+  @keyframes shine {
+    to {
+      background-position: -50% 0;
+    }
+  }
+
+  p {
+    grid-column: 2 / 4;
+    max-width: 38rem;
+    font-size: 1.125rem;
+  }
+
+  .row:hover p,
+  .row:hover .label {
+    font-weight: 600;
+  }
+
+  /* Each project pops up as it scrolls into view: it rises, grows to full
+     size and fades in, tied to the scroll, so it plays backwards on the way up. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .row {
+        animation: pop linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+
+      @keyframes pop {
+        from {
+          opacity: 0;
+          transform: translateY(4rem) scale(0.92);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 2rem minmax(0, 1fr) auto;
+    }
+
+    .type {
+      grid-column: 2 / -1;
+      grid-row: 2;
+    }
+
+    p {
+      grid-column: 2 / -1;
+    }
+  }
+</style>

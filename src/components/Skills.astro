@@ -1,0 +1,130 @@
+---
+import { skills } from '../data/site';
+
+// Each belt holds the list several times so it can loop without a gap.
+const repeat = (items: string[]) => [...items, ...items, ...items, ...items];
+---
+
+<section class="section wrap" id="skills">
+  <header class="sec-head reveal">
+    <span class="label">06</span>
+    <h2>Skills</h2>
+    <span class="label muted">/ Tools I use</span>
+  </header>
+
+  <dl>
+    {skills.map((s) => (
+      <div class="group reveal">
+        <dt class="label muted">{s.group}</dt>
+        <dd>
+          <span class="sr">{s.items.join(', ')}</span>
+          <div class="belt" aria-hidden="true">
+            {[0, 1].map(() => (
+              <ul>
+                {repeat(s.items).map((item) => (
+                  <li>
+                    {item} <span class="dot" />
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .group {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--gap);
+    padding-block: clamp(0.75rem, 1.5vw, 1.25rem);
+    border-bottom: 1px solid var(--line);
+  }
+
+  dd {
+    overflow: hidden;
+  }
+
+  /* Two identical lists side by side; sliding by half the width loops forever. */
+  .belt {
+    display: flex;
+    width: max-content;
+    animation: belt 36s linear infinite;
+  }
+
+  .belt:hover {
+    animation-play-state: paused;
+  }
+
+  ul {
+    display: flex;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding-right: 0.6em;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  li .dot {
+    width: 0.35em;
+    height: 0.35em;
+  }
+
+  @keyframes belt {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Row 2: runs the other way. */
+  .group:nth-child(2) .belt {
+    animation-direction: reverse;
+    animation-duration: 44s;
+  }
+
+  /* Row 3: outlined letters, faster. */
+  .group:nth-child(3) .belt {
+    animation-duration: 28s;
+  }
+
+  .group:nth-child(3) li {
+    /* Fill in the page colour, painted over the stroke, hides the overlaps inside letters. */
+    color: var(--bg);
+    -webkit-text-stroke: 2px var(--ink);
+    paint-order: stroke fill;
+  }
+
+  /* Row 4: accent colour, other way, slow. */
+  .group:nth-child(4) .belt {
+    animation-direction: reverse;
+    animation-duration: 52s;
+  }
+
+  .group:nth-child(4) li {
+    color: var(--accent);
+  }
+
+  .group:nth-child(4) .dot {
+    background: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .group {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,20 @@
+# Dependencies and build output
+node_modules/
+dist/
+.astro/
+.vercel/
+
+# Secrets
+.env
+.env.*
+
+# Raw media kept out of the repo (originals, screen recordings, references)
+shots/
+pic*
+*.mp4
+*.mov
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+*.log

@@ -1,0 +1,122 @@
+---
+import { site } from '../data/site';
+
+const notes = [
+  {
+    title: 'My philosophy',
+    text: 'Clarity first. I keep only what has a reason to be there: fewer elements, faster pages, plain words. A simple product that works beats a clever one that confuses.',
+  },
+  {
+    title: 'My way of working',
+    text: 'I work AI-native. I plan in writing, then build with AI in small, reviewed steps. That lets me ship quickly without losing control of quality or security.',
+  },
+];
+---
+
+<section class="section wrap about" id="about">
+  <header class="sec-head reveal">
+    <span class="label">01</span>
+    <h2>About</h2>
+    <span class="label muted">/ Who I am</span>
+  </header>
+
+  <p class="label muted reveal">Hello, I'm {site.name}</p>
+  <p class="lead reveal">
+    Design is not decoration <span class="muted">— it is how a business speaks, and I build it to be understood.</span>
+  </p>
+
+  <div class="notes">
+    {notes.map((n) => (
+      <article class="note reveal">
+        <h3 class="label">
+          {n.title} <span class="arrow" aria-hidden="true">↘</span>
+        </h3>
+        <p>{n.text}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  /* Dark section; the shared tokens are re-pointed so labels and lines stay readable. */
+  .about {
+    background: var(--ink);
+    color: var(--bg);
+    --muted: #8f8e89;
+    --line: rgb(243 242 238 / 0.2);
+  }
+
+  .sec-head {
+    border-top-color: var(--bg);
+  }
+
+  .lead {
+    max-width: 22ch;
+    margin-top: 1.5rem;
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+
+  /* Notes sit in a narrow column, the second one stepped to the right. */
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    row-gap: clamp(3rem, 7vw, 6rem);
+    margin-top: clamp(3rem, 8vw, 7rem);
+  }
+
+  .note {
+    display: grid;
+    gap: 1.25rem;
+    grid-column: 5 / span 4;
+  }
+
+  .note:nth-child(2) {
+    grid-column: 8 / span 4;
+  }
+
+  .note p {
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-align: center;
+    transition: color 0.5s var(--ease);
+  }
+
+  /* Heading is first for screen readers, shown under the text like a caption. */
+  .note h3 {
+    order: 2;
+    justify-self: end;
+    color: var(--muted);
+    transition: color 0.5s var(--ease);
+  }
+
+  .arrow {
+    display: inline-block;
+    transition: rotate 0.5s var(--ease);
+  }
+
+  .note:hover p,
+  .note:hover h3 {
+    color: var(--accent);
+  }
+
+  .note:hover .arrow {
+    rotate: -45deg;
+  }
+
+  @media (max-width: 800px) {
+    .note,
+    .note:nth-child(2) {
+      grid-column: 1 / -1;
+    }
+
+    .note p {
+      text-align: left;
+    }
+  }
+</style>

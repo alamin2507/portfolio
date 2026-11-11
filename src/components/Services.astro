@@ -1,0 +1,230 @@
+---
+import { services } from '../data/site';
+import ServiceArt from './ServiceArt.astro';
+---
+
+<section class="section wrap" id="services">
+  <header class="sec-head reveal">
+    <span class="label">02</span>
+    <h2>Services</h2>
+    <span class="label muted">/ What I do</span>
+  </header>
+
+  <!-- A row of tall columns. The hovered (or focused, or tapped) column grows
+       and opens; with nothing hovered, the first one stays open.
+       tabindex lets keyboard and touch users open a column too. -->
+  <ul class="cols">
+    {services.map((s, i) => (
+      <li class="col" tabindex="0">
+        <div class="top">
+          <span class="label">00-{i + 1}</span>
+          <h3>{s.title}</h3>
+        </div>
+        <div class="more">
+          <div class="list">
+            <ul class="points label">
+              {s.points.map((p) => (
+                <li>/ {p}</li>
+              ))}
+            </ul>
+            <ServiceArt n={i} />
+          </div>
+          <p class="text">{s.text}</p>
+          <p class="label level">// {s.level}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .cols {
+    display: flex;
+    height: clamp(28rem, 64svh, 38rem);
+    border-block: 1px solid var(--ink);
+  }
+
+  .col {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    overflow: hidden;
+    border-left: 1px solid var(--line);
+    cursor: default;
+    transition:
+      flex-grow 0.7s var(--ease),
+      background-color 0.5s var(--ease);
+  }
+
+  .col:first-child {
+    border-left: 0;
+  }
+
+  .top {
+    display: grid;
+    gap: 1rem;
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 2rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  /* Fixed width so the text does not reflow while the column grows.
+     No transform here: the drawing inside is placed against the column. */
+  .more {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: min(26rem, 40vw);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease);
+  }
+
+  .points {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .text {
+    margin-top: auto;
+    font-size: 1.0625rem;
+  }
+
+  /* Open: the hovered or focused column, or the first one while nothing is hovered. */
+  .col:hover,
+  .col:focus-within,
+  .cols:not(:hover, :focus-within) .col:first-child {
+    flex-grow: 3.4;
+  }
+
+  .col:hover .more,
+  .col:focus-within .more,
+  .cols:not(:hover, :focus-within) .col:first-child .more {
+    opacity: 1;
+    transition-delay: 0.2s;
+  }
+
+  /* Title colour. Accent sweeps in from the left as --fill goes 0 to 1.
+     /main.js sets --fill: the selected column gets it (the first one while
+     nothing is selected), and it follows the scroll, so it empties again when
+     you scroll the row away. Backgrounds stay light. */
+  h3 {
+    color: transparent;
+    background: linear-gradient(90deg, var(--accent) 50%, var(--ink) 50%) calc((1 - var(--fill, 0)) * 100%) 0 / 200%
+      100%;
+    background-clip: text;
+    transition: background-position 0.5s var(--ease);
+  }
+
+  /* Without the script: plain hover colour. */
+  :global(html:not(.js)) .col:hover h3,
+  :global(html:not(.js)) .col:focus-within h3 {
+    --fill: 1;
+  }
+
+  /* Drawing in the empty right side of the open column. It only animates while
+     its column is open, so it replays every time a column opens. */
+  .col {
+    position: relative;
+  }
+
+  .col :global(.art) {
+    position: absolute;
+    top: clamp(5.5rem, 9vw, 7rem);
+    right: 1.25rem;
+    width: clamp(9rem, 20vw, 20rem);
+    overflow: visible;
+    opacity: 0;
+    transition: opacity 0.3s var(--ease);
+  }
+
+  .col:hover :global(.art),
+  .col:focus-within :global(.art),
+  .cols:not(:hover, :focus-within) .col:first-child :global(.art) {
+    opacity: 1;
+    transition-delay: 0.25s;
+  }
+
+  .col:focus-visible {
+    outline-offset: -3px;
+  }
+
+  /* Phones and tablets: the same idea turned on its side. Columns become rows;
+     the tapped row opens downward (grid rows 0fr to 1fr animate the height)
+     and its title turns accent. With nothing tapped, the first row stays open. */
+  @media (max-width: 900px) {
+    .cols {
+      flex-direction: column;
+      height: auto;
+    }
+
+    /* flex: none lets each row take its own content height. */
+    .col,
+    .col:hover,
+    .col:focus-within,
+    .cols:not(:hover, :focus-within) .col:first-child {
+      flex: none;
+    }
+
+    .col {
+      display: grid;
+      grid-template-rows: auto 0fr;
+      gap: 0;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+      transition:
+        grid-template-rows 0.6s var(--ease),
+        background-color 0.5s var(--ease);
+    }
+
+    .col:first-child {
+      border-top: 0;
+    }
+
+    .top {
+      grid-template-columns: 3.5rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    /* Phones: the drawing sits in the row next to the list, so it can never
+       cover the text. */
+    .list {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      padding-top: 1.25rem;
+    }
+
+    .col :global(.art) {
+      position: static;
+      flex: none;
+      width: 6.5rem;
+    }
+
+    .more {
+      width: auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .col:hover,
+    .col:focus-within,
+    .cols:not(:hover, :focus-within) .col:first-child {
+      grid-template-rows: auto 1fr;
+    }
+  }
+</style>

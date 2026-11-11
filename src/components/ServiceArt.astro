@@ -1,0 +1,271 @@
+---
+// Small line drawing for each service, in the same order as `services` in
+// src/data/site.ts. It plays when its column opens (see Services.astro).
+// Every keyframe animates FROM a hidden state, so with motion off the drawing
+// simply shows complete.
+interface Props {
+  n: number;
+}
+const { n } = Astro.props;
+---
+
+<svg class="art" viewBox="0 0 200 150" aria-hidden="true">
+  {
+    n === 0 && (
+      <g>
+        {/* Web design: a browser window draws itself, then the page fills in. */}
+        <rect class="draw" x="4" y="4" width="192" height="142" rx="6" pathLength="1" />
+        <line class="draw" x1="4" y1="26" x2="196" y2="26" pathLength="1" />
+        <circle class="pop accent" cx="17" cy="15" r="3.5" />
+        <circle class="pop d1" cx="29" cy="15" r="3.5" />
+        <circle class="pop d2" cx="41" cy="15" r="3.5" />
+        <rect class="grow d2" x="18" y="42" width="92" height="12" />
+        <rect class="grow d3" x="18" y="62" width="70" height="5" />
+        <rect class="grow d3" x="18" y="73" width="56" height="5" />
+        <rect class="grow accent d4" x="18" y="92" width="44" height="14" rx="7" />
+        <rect class="draw d2" x="124" y="42" width="58" height="88" pathLength="1" />
+        <path class="draw d4" d="M124 116 L144 94 L160 110 L170 100 L182 112" pathLength="1" />
+      </g>
+    )
+  }
+  {
+    n === 1 && (
+      <g>
+        {/* Business and AI: a hub connects to four parts of a business; signals run out. */}
+        <line class="draw" x1="100" y1="75" x2="30" y2="28" pathLength="1" />
+        <line class="draw d1" x1="100" y1="75" x2="170" y2="28" pathLength="1" />
+        <line class="draw d2" x1="100" y1="75" x2="30" y2="122" pathLength="1" />
+        <line class="draw d3" x1="100" y1="75" x2="170" y2="122" pathLength="1" />
+        <circle class="node" cx="30" cy="28" r="9" />
+        <circle class="node" cx="170" cy="28" r="9" />
+        <circle class="node" cx="30" cy="122" r="9" />
+        <circle class="node" cx="170" cy="122" r="9" />
+        <circle class="pulse p1" cx="100" cy="75" r="3" />
+        <circle class="pulse p2" cx="100" cy="75" r="3" />
+        <circle class="pulse p3" cx="100" cy="75" r="3" />
+        <circle class="pulse p4" cx="100" cy="75" r="3" />
+        <circle class="pop accent hub" cx="100" cy="75" r="17" />
+        <path class="spark" d="M100 64 L103 72 L111 75 L103 78 L100 86 L97 78 L89 75 L97 72 Z" />
+      </g>
+    )
+  }
+  {
+    n === 2 && (
+      <g>
+        {/* Digital marketing: bars rise and a trend line climbs over them. */}
+        <polyline class="draw" points="10,6 10,140 194,140" pathLength="1" />
+        <rect class="rise d1" x="28" y="102" width="24" height="38" />
+        <rect class="rise d2" x="68" y="84" width="24" height="56" />
+        <rect class="rise d3" x="108" y="62" width="24" height="78" />
+        <rect class="rise accent d4" x="148" y="34" width="24" height="106" />
+        <polyline class="draw trend d3" points="40,88 80,70 120,46 172,14" pathLength="1" />
+        <polyline class="draw trend d4" points="160,12 172,14 168,26" pathLength="1" />
+      </g>
+    )
+  }
+  {
+    n === 3 && (
+      <g>
+        {/* Video editing: a preview with a play button over a timeline; the playhead runs. */}
+        <rect class="draw" x="4" y="4" width="192" height="84" rx="6" pathLength="1" />
+        <path class="pop accent d1" d="M90 30 L116 46 L90 62 Z" />
+        <rect class="grow d1" x="4" y="104" width="54" height="16" />
+        <rect class="grow accent d2" x="62" y="104" width="76" height="16" />
+        <rect class="grow d3" x="142" y="104" width="54" height="16" />
+        <rect class="grow d3" x="4" y="126" width="110" height="10" />
+        <rect class="grow d4" x="118" y="126" width="40" height="10" />
+        <line class="playhead" x1="6" y1="98" x2="6" y2="142" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .art * {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .art .grow,
+  .art .rise,
+  .art .pop,
+  .art .pulse {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .art .accent {
+    fill: var(--accent);
+  }
+
+  .art .trend {
+    stroke: var(--accent);
+    stroke-width: 2.5;
+  }
+
+  .art .node {
+    fill: var(--bg);
+  }
+
+  .art .spark {
+    fill: var(--bg);
+    stroke: none;
+  }
+
+  .art .playhead {
+    stroke: var(--accent);
+    stroke-width: 2.5;
+  }
+
+  .art .draw {
+    stroke-dasharray: 1;
+  }
+
+  /* Shapes scale from their own box (left edge, bottom edge or centre). */
+  .art .grow,
+  .art .rise,
+  .art .pop {
+    transform-box: fill-box;
+  }
+
+  .art .grow {
+    transform-origin: 0 50%;
+  }
+
+  .art .rise {
+    transform-origin: 50% 100%;
+  }
+
+  .art .pop {
+    transform-origin: 50% 50%;
+  }
+
+  /* Animations run only while the column is open. */
+  :global(.col:hover) .draw,
+  :global(.col:focus-within) .draw,
+  :global(.cols:not(:hover, :focus-within) .col:first-child) .draw {
+    animation: draw 0.9s var(--ease) both;
+  }
+
+  :global(.col:hover) .grow,
+  :global(.col:focus-within) .grow,
+  :global(.cols:not(:hover, :focus-within) .col:first-child) .grow {
+    animation: grow 0.6s var(--ease) both;
+  }
+
+  :global(.col:hover) .rise,
+  :global(.col:focus-within) .rise,
+  :global(.cols:not(:hover, :focus-within) .col:first-child) .rise {
+    animation: rise-y 0.7s var(--ease) both;
+  }
+
+  :global(.col:hover) .pop,
+  :global(.col:focus-within) .pop,
+  :global(.cols:not(:hover, :focus-within) .col:first-child) .pop {
+    animation: pop 0.5s var(--ease) both;
+  }
+
+  :global(.col:hover) .pulse,
+  :global(.col:focus-within) .pulse,
+  :global(.cols:not(:hover, :focus-within) .col:first-child) .pulse {
+    animation: pulse 2.8s ease-in-out 0.9s infinite both;
+  }
+
+  :global(.col:hover) .playhead,
+  :global(.col:focus-within) .playhead,
+  :global(.cols:not(:hover, :focus-within) .col:first-child) .playhead {
+    animation: play 3.2s linear 0.6s infinite both;
+  }
+
+  .d1 {
+    animation-delay: 0.15s !important;
+  }
+
+  .d2 {
+    animation-delay: 0.3s !important;
+  }
+
+  .d3 {
+    animation-delay: 0.45s !important;
+  }
+
+  .d4 {
+    animation-delay: 0.6s !important;
+  }
+
+  /* Signals run from the hub to each outer node. */
+  .p1 {
+    --dx: -70px;
+    --dy: -47px;
+  }
+
+  .p2 {
+    --dx: 70px;
+    --dy: -47px;
+    animation-delay: 1.6s !important;
+  }
+
+  .p3 {
+    --dx: -70px;
+    --dy: 47px;
+    animation-delay: 2.3s !important;
+  }
+
+  .p4 {
+    --dx: 70px;
+    --dy: 47px;
+    animation-delay: 3s !important;
+  }
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes grow {
+    from {
+      scale: 0 1;
+    }
+  }
+
+  @keyframes rise-y {
+    from {
+      scale: 1 0;
+    }
+  }
+
+  @keyframes pop {
+    from {
+      scale: 0;
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      translate: 0 0;
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+    70%,
+    100% {
+      translate: var(--dx) var(--dy);
+      opacity: 0;
+    }
+  }
+
+  @keyframes play {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: 188px 0;
+    }
+  }
+</style>

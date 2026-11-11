@@ -1,0 +1,155 @@
+---
+import { process } from '../data/site';
+---
+
+<section class="section wrap" id="process">
+  <!-- .pin is tall; .stage sticks to the screen while you scroll through it,
+       and the scroll position drives the cards sideways (CSS scroll-driven animation). -->
+  <div class="pin">
+    <div class="stage">
+      <header class="sec-head">
+        <span class="label">04</span>
+        <h2>Process</h2>
+        <span class="label muted">/ How I work</span>
+      </header>
+
+      <ol class="track">
+        {process.map((step, i) => (
+          <li>
+            <span class="num">0{i + 1}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sec-head {
+    margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  /* Base (also the fallback): a row you can swipe sideways. */
+  .track {
+    display: flex;
+    gap: var(--gap);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  li {
+    flex: none;
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    gap: 0.75rem;
+    width: min(78vw, 30rem);
+    height: clamp(17rem, 46svh, 26rem);
+    padding: clamp(1rem, 2vw, 1.5rem);
+    border: 1px solid var(--line);
+    scroll-snap-align: start;
+    transition:
+      background-color 0.5s var(--ease),
+      border-color 0.5s var(--ease);
+  }
+
+  li:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .num {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+    color: var(--muted);
+    transition: color 0.5s var(--ease);
+  }
+
+  li:hover .num {
+    color: var(--ink);
+  }
+
+  h3 {
+    font-size: clamp(1.75rem, 3.4vw, 3rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .pin {
+        height: 300vh;
+        view-timeline-name: --process;
+      }
+
+      .stage {
+        position: sticky;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100svh;
+        overflow: hidden;
+      }
+
+      .track {
+        width: max-content;
+        overflow: visible;
+        animation: run linear both;
+        animation-timeline: --process;
+        animation-range: contain 0% contain 100%;
+      }
+
+      /* Each card lights up during its own quarter of the scroll, one at a time. */
+      li {
+        animation: lit linear;
+        animation-timeline: --process;
+      }
+
+      li:nth-child(1) {
+        animation-range: contain 0% contain 25%;
+      }
+
+      li:nth-child(2) {
+        animation-range: contain 25% contain 50%;
+      }
+
+      li:nth-child(3) {
+        animation-range: contain 50% contain 75%;
+      }
+
+      li:nth-child(4) {
+        animation-range: contain 75% contain 100%;
+      }
+
+      @keyframes lit {
+        0%,
+        100% {
+          background-color: transparent;
+          border-color: var(--line);
+        }
+
+        12%,
+        88% {
+          background-color: var(--accent);
+          border-color: var(--accent);
+          --muted: var(--ink);
+        }
+      }
+
+      /* End position: the last card sits against the right edge. */
+      @keyframes run {
+        to {
+          transform: translateX(calc(100vw - 100% - 2 * var(--pad)));
+        }
+      }
+    }
+  }
+</style>

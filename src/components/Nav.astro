@@ -1,0 +1,269 @@
+---
+import { site, nav } from '../data/site';
+
+// Logo on two lines: first name, then the rest.
+const [first, ...rest] = site.name.split(' ');
+const talk = "Let's talk ↗";
+---
+
+<!-- mix-blend-mode: difference makes the white nav turn dark over light areas
+     and stay white over dark areas, with no JavaScript. -->
+<header class="nav wrap">
+  <a class="logo" href="#top" aria-label={site.name}>{first}<br />{rest.join(' ')}</a>
+  <nav aria-label="Main">
+    <ul>
+      {nav.map((item) => (
+        <li>
+          <a class="label roll" href={item.href} data-text={item.label}><span>{item.label}</span></a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <a class="label roll talk" href={`mailto:${site.email}`} data-text={talk}><span>{talk}</span></a>
+  <button class="label open" type="button" popovertarget="menu">Menu<sup>+</sup></button>
+</header>
+
+<!-- Accent twin of the nav. It sits on top, outside the blend mode, so the
+     accent colour stays true. Each piece shows only while its original is hovered. -->
+<div class="nav wrap ghost" aria-hidden="true">
+  <span class="logo">{first}<br />{rest.join(' ')}</span>
+  <span class="label roll talk" data-text={talk}><span>{talk}</span></span>
+</div>
+
+<!-- Phone menu. The popover attribute gives open, close, Escape and focus
+     handling with no JavaScript; /main.js only closes it after a link is tapped. -->
+<div class="menu" id="menu" popover>
+  <div class="mhead wrap">
+    <span class="logo">{first}<br />{rest.join(' ')}</span>
+    <button class="label close" type="button" popovertarget="menu" popovertargetaction="hide">[ Close ]</button>
+  </div>
+  <p class="label where wrap">
+    {site.timeCity}, Pakistan:<br />(GMT+5) <span data-time={site.timeZone}>--:--</span>
+  </p>
+  <ul class="links wrap">
+    {nav.map((item) => (
+      <li>
+        <a href={item.href}>{item.label}</a>
+      </li>
+    ))}
+    <li>
+      <a href={`mailto:${site.email}`}>Let's talk ↗</a>
+    </li>
+  </ul>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--gap);
+    padding-block: 1.25rem;
+    color: #fff;
+    mix-blend-mode: difference;
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 0.72;
+    letter-spacing: -0.075em;
+    word-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ghost {
+    z-index: 51;
+    color: var(--accent);
+    mix-blend-mode: normal;
+    pointer-events: none;
+  }
+
+  /* Logo twin: uncovered from the bottom. */
+  .ghost .logo {
+    clip-path: inset(100% 0 0);
+    transition: clip-path 0.5s var(--ease);
+  }
+
+  .nav:has(.logo:hover) + .ghost .logo,
+  .nav:has(.logo:focus-visible) + .ghost .logo {
+    clip-path: inset(0);
+  }
+
+  /* "Let's talk" twin: its first line is invisible, so only the accent copy
+     rolls in, exactly over the copy that rolls in underneath. */
+  /* The original's own roll-in copy is hidden, so only the accent one is seen. */
+  header .talk::after {
+    color: transparent;
+  }
+
+  .ghost .talk span {
+    visibility: hidden;
+  }
+
+  .nav:has(.talk:hover) + .ghost .talk span,
+  .nav:has(.talk:hover) + .ghost .talk::after,
+  .nav:has(.talk:focus-visible) + .ghost .talk span,
+  .nav:has(.talk:focus-visible) + .ghost .talk::after {
+    transform: translateY(-100%);
+  }
+
+  ul {
+    display: flex;
+    gap: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  .label {
+    font-size: 0.875rem;
+    font-weight: 300;
+  }
+
+  button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .open {
+    display: none;
+  }
+
+  sup {
+    font-size: 0.7em;
+  }
+
+  /* Full-screen phone menu: drops down from the top, the links rise in one
+     after another; closing plays it backwards. */
+  .menu {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--bg);
+    color: var(--ink);
+    clip-path: inset(0 0 100% 0);
+    transition:
+      clip-path 0.6s var(--ease),
+      display 0.6s allow-discrete,
+      overlay 0.6s allow-discrete;
+  }
+
+  .menu:popover-open {
+    display: flex;
+    flex-direction: column;
+    clip-path: inset(0);
+  }
+
+  @starting-style {
+    .menu:popover-open {
+      clip-path: inset(0 0 100% 0);
+    }
+  }
+
+  .mhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 1.25rem;
+  }
+
+  .mhead .logo {
+    color: var(--accent);
+  }
+
+  .close {
+    transition: color var(--fast) var(--ease);
+  }
+
+  .close:hover {
+    color: var(--accent);
+  }
+
+  .where {
+    align-self: flex-end;
+    text-align: right;
+    color: var(--muted);
+  }
+
+  .links {
+    display: block;
+    margin-block: auto;
+  }
+
+  /* Each line is a mask; its link slides up into it. */
+  .links li {
+    overflow: hidden;
+  }
+
+  .links a {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 15vw, 5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    translate: 0 105%;
+    transition:
+      translate 0.6s var(--ease),
+      color var(--fast) var(--ease);
+  }
+
+  .menu:popover-open .links a {
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .menu:popover-open .links a {
+      translate: 0 105%;
+    }
+  }
+
+  .links li:nth-child(2) a {
+    transition-delay: 0.05s, 0s;
+  }
+
+  .links li:nth-child(3) a {
+    transition-delay: 0.1s, 0s;
+  }
+
+  .links li:nth-child(4) a {
+    transition-delay: 0.15s, 0s;
+  }
+
+  .links li:nth-child(5) a {
+    transition-delay: 0.2s, 0s;
+    color: var(--accent);
+  }
+
+  .links a:hover,
+  .links a:focus-visible {
+    color: var(--accent);
+  }
+
+  /* Phones: the link row and "Let's talk" give way to the Menu button. */
+  @media (max-width: 640px) {
+    nav,
+    .talk {
+      display: none;
+    }
+
+    .open {
+      display: block;
+    }
+  }
+</style>

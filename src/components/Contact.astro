@@ -1,0 +1,180 @@
+---
+import { site, nav } from '../data/site';
+---
+
+<footer class="contact wrap" id="contact">
+  <div class="top reveal">
+    <div class="ask">
+      <p class="label"><span class="dot"></span> Available for collaboration</p>
+      <h2>Have a project in mind?</h2>
+    </div>
+    <div class="reach">
+      <p class="label muted">Let's talk ↘</p>
+      <a class="mail link" href={`mailto:${site.email}`}>{site.email}</a>
+      <ul class="social">
+        {site.socials.map((s) => (
+          <li>
+            <a class="label roll" href={s.href} target="_blank" rel="noopener noreferrer" data-text={`${s.label} ↗`}>
+              <span>{s.label} ↗</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="mid reveal">
+    <ul class="menu">
+      {nav.map((n) => (
+        <li>
+          <a class="label roll" href={n.href} data-text={n.label}><span>{n.label}</span></a>
+        </li>
+      ))}
+    </ul>
+    <p class="label muted where">
+      Based in {site.location}<br />Studying in {site.timeCity}
+    </p>
+  </div>
+
+  <!-- The name, set as large as the page allows. -->
+  <p class="name" aria-hidden="true">{site.name}</p>
+
+  <div class="base label">
+    <span>{site.timeCity} · <span data-time={site.timeZone}>--:--</span></span>
+    <span>© {new Date().getFullYear()} {site.name}</span>
+    <a class="link" href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<style>
+  .contact {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    padding-block: var(--section) 1.25rem;
+    background: var(--ink);
+    color: var(--bg);
+    --muted: #a3a29c;
+    --line: rgb(243 242 238 / 0.2);
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--gap);
+    align-items: end;
+  }
+
+  .ask {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .reach {
+    display: grid;
+    justify-items: end;
+    gap: 0.75rem;
+    text-align: right;
+  }
+
+  .mail {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.6vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1;
+    transition: color var(--fast) var(--ease);
+  }
+
+  .mail:hover {
+    color: var(--accent);
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.5rem 1.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .mid {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--gap);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .menu {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .where {
+    text-align: right;
+  }
+
+  .name {
+    margin-block: clamp(1rem, 3vw, 2rem) -0.04em;
+    font-family: var(--font-display);
+    font-size: 18.3vw;
+    font-weight: 700;
+    line-height: 0.78;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  /* Scroll-linked fill: accent sweeps across the name, left to right, as it
+     rises into view, and sweeps back when you scroll up. Pure CSS. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .name {
+        color: transparent;
+        background: linear-gradient(90deg, var(--accent) 50%, var(--bg) 50%) 100% 0 / 200% 100%;
+        background-clip: text;
+        animation: fill linear both;
+        animation-timeline: view();
+        animation-range: entry 10% entry 100%;
+      }
+
+      @keyframes fill {
+        to {
+          background-position: 0 0;
+        }
+      }
+    }
+  }
+
+  .base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.75rem var(--gap);
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 800px) {
+    .top {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reach {
+      justify-items: start;
+      text-align: left;
+    }
+
+    .social {
+      justify-content: flex-start;
+    }
+  }
+</style>

@@ -1,0 +1,141 @@
+---
+// Two rings of text spin in 3D while a counter runs 0 → 100, then the
+// loader lifts away. Plays on every page load (about 2.4 s), never blocks
+// clicks (pointer-events: none) and is skipped under reduced motion.
+// /main.js places each letter around its ring (CSP forbids inline styles).
+const big = [...'Design that solves real problems — '];
+const small = [...'Sayem Al Amin · Designer & Developer · AI-native builder · '];
+---
+
+<div class="loader" aria-hidden="true">
+  <div class="scene">
+    <div class="lift">
+      <div class="ring big">{big.map((c) => <span>{c}</span>)}</div>
+      <div class="ring small">{small.map((c) => <span>{c}</span>)}</div>
+    </div>
+  </div>
+  <b class="count"></b>
+</div>
+
+<style>
+  /* Registering --n as an integer lets CSS animate a number. */
+  @property --n {
+    syntax: '<integer>';
+    initial-value: 0;
+    inherits: false;
+  }
+
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    color: var(--ink);
+    pointer-events: none;
+    animation: out 0.5s 1.9s var(--ease) forwards;
+  }
+
+  .scene {
+    perspective: 60rem;
+  }
+
+  /* The rings travel up from below the screen, tilted toward the viewer. */
+  .lift {
+    display: grid;
+    justify-items: center;
+    gap: clamp(4rem, 8vw, 6.5rem);
+    transform: rotateX(-16deg) rotateZ(-5deg);
+    transform-style: preserve-3d;
+    animation: up 0.9s var(--ease) both;
+  }
+
+  .ring {
+    position: relative;
+    width: 0;
+    height: 1em;
+    transform-style: preserve-3d;
+    animation: turn 3.2s linear infinite;
+  }
+
+  .ring span {
+    position: absolute;
+    top: 0;
+    left: calc(var(--step) * -0.5em);
+    width: calc(var(--step) * 1em);
+    text-align: center;
+  }
+
+  /* --step: how much of the ring one letter takes, in em (read by /main.js too). */
+  .big {
+    --step: 0.46;
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5.4vw, 4.75rem);
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .small {
+    --step: 0.66;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    animation-direction: reverse;
+    animation-duration: 4.4s;
+  }
+
+  /* Without the script the letters would pile up, so the rings stay hidden. */
+  :global(html:not(.js)) .ring {
+    display: none;
+  }
+
+  .count {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    translate: -50% 0;
+    font-size: var(--fs-label);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    counter-reset: n var(--n);
+    animation: count 1.6s 0.3s ease-in-out both;
+  }
+
+  .count::after {
+    content: counter(n) '%';
+  }
+
+  @keyframes count {
+    to {
+      --n: 100;
+    }
+  }
+
+  @keyframes up {
+    from {
+      translate: 0 70vh;
+    }
+  }
+
+  @keyframes turn {
+    to {
+      rotate: y 1turn;
+    }
+  }
+
+  @keyframes out {
+    to {
+      transform: translateY(-100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader {
+      display: none;
+    }
+  }
+</style>
