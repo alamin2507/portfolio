@@ -56,8 +56,8 @@ An SOP (Standard Operating Procedure) is the fixed routine for every change. Fol
 1. Create a GitHub repository and push `main`. GitHub Actions (`.github/workflows/ci.yml`) then builds every push.
 2. On vercel.com: Add New Project, import the repository. Vercel detects Astro (build `npm run build`, output `dist`).
 3. Every push to `main` now deploys automatically (this is CI/CD). Pull requests get preview links.
-4. Vercel → Project → Settings → Domains: add `sayemalamin.com` and `www.sayemalamin.com`, then set the DNS records Vercel shows at the domain registrar. HTTPS is automatic.
-5. `site` in `astro.config.mjs` is already `https://sayemalamin.com`; change it only if the domain changes.
+4. Vercel → Project → Settings → Domains: add `sayem.me` and `www.sayem.me`, then set the DNS records Vercel shows at the domain registrar. HTTPS is automatic.
+5. `site` in `astro.config.mjs` is already `https://sayem.me`; change it only if the domain changes.
 6. Test the live site: PageSpeed Insights, securityheaders.com, Mozilla Observatory, W3C validator.
 
 ## 8. Maintenance

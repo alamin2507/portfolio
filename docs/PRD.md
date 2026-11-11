@@ -79,7 +79,7 @@ Hero copy:
 | JavaScript | One small file (`public/main.js`, about 3 kB) | Loader ring layout, scroll reveal, phone menu, services title colour, live clock |
 | Images | `astro:assets` → AVIF/WebP, responsive sizes | Small files |
 | Content | `src/data/site.ts` | One file to edit text, links and projects |
-| Hosting | Vercel, domain sayemalamin.com | Free, global CDN, deploys on every push to `main`, reads `vercel.json` |
+| Hosting | Vercel, domain sayem.me | Free, global CDN, deploys on every push to `main`, reads `vercel.json` |
 | Security | Strict CSP (no inline script or style), HSTS, nosniff, frame deny, Referrer-Policy, Permissions-Policy, CORP/COOP | See `vercel.json` |
 
 ## 8. Done means

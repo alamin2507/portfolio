@@ -1,9 +1,9 @@
-# sayemalamin.com
+# sayem.me
 
 Personal portfolio of **Sayem Al Amin**, designer and developer.
 A fast, static, single-page site built with Astro and plain CSS.
 
-**Live:** https://sayemalamin.com
+**Live:** https://sayem.me
 
 ## Highlights
 
