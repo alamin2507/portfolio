@@ -1,5 +1,7 @@
 # sayem.me
 
+[![sayem.me: I design and build digital products that solve real business problems.](public/og.png)](https://sayem.me)
+
 Personal portfolio of **Sayem Al Amin**, designer and developer.
 A fast, static, single-page site built with Astro and plain CSS.
 
