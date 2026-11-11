@@ -63,7 +63,7 @@ An SOP (Standard Operating Procedure) is the fixed routine for every change. Fol
 ## 8. Maintenance
 
 - Dependabot opens pull requests for updates (npm weekly, GitHub Actions monthly). Each one runs CI and gets a Vercel preview link: open the preview, check it, then merge.
-- GitHub alerts on known vulnerabilities (Dependabot alerts) and blocks pushes that contain secrets (push protection).
-- `main` cannot be force-pushed or deleted (repository ruleset).
+- GitHub alerts on known vulnerabilities (Dependabot alerts).
+- The repository is private. On the free plan that turns off CodeQL, secret scanning, push protection and the `main` ruleset; they come back if the repository is made public again (or on GitHub Pro).
 - `npm audit` must report 0 high vulnerabilities; CI fails otherwise.
 - New project finished → add it to `src/data/site.ts`.
