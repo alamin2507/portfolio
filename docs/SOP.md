@@ -62,6 +62,8 @@ An SOP (Standard Operating Procedure) is the fixed routine for every change. Fol
 
 ## 8. Maintenance
 
-- Monthly: `npm outdated`, then `npm update`, then build and check.
-- `npm audit` must report 0 vulnerabilities.
+- Dependabot opens pull requests for updates (npm weekly, GitHub Actions monthly). Each one runs CI and gets a Vercel preview link: open the preview, check it, then merge.
+- GitHub alerts on known vulnerabilities (Dependabot alerts) and blocks pushes that contain secrets (push protection).
+- `main` cannot be force-pushed or deleted (repository ruleset).
+- `npm audit` must report 0 high vulnerabilities; CI fails otherwise.
 - New project finished → add it to `src/data/site.ts`.

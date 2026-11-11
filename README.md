@@ -5,6 +5,10 @@ A fast, static, single-page site built with Astro and plain CSS.
 
 **Live:** https://sayem.me
 
+[![CI](https://github.com/alamin2507/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/alamin2507/portfolio/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
+[![Site](https://img.shields.io/website?url=https%3A%2F%2Fsayem.me&label=sayem.me)](https://sayem.me)
+
 ## Highlights
 
 - **Static and light.** No backend, no database, no UI framework. One small JavaScript file (about 3 kB).
@@ -22,7 +26,8 @@ A fast, static, single-page site built with Astro and plain CSS.
 | Styling | Plain CSS with design tokens (custom properties) |
 | JavaScript | One file, `public/main.js` |
 | Hosting | Vercel, deployed from `main` |
-| CI | GitHub Actions: install, audit, build |
+| CI | GitHub Actions: install, audit, build (actions pinned to commits) |
+| Updates | Dependabot pull requests, weekly for npm, monthly for Actions |
 
 ## Getting started
 
@@ -53,6 +58,10 @@ To change text, links or projects, edit `src/data/site.ts` only.
 ## How this was built
 
 This site is itself the first case study in the portfolio: planned in writing first (a PRD and an SOP in [`docs/`](docs/)), then built in small, reviewed steps with AI assistance. The working rules for AI agents are in [`AGENTS.md`](AGENTS.md).
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for how to report a vulnerability privately.
 
 ## License
 
